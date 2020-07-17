@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -17,8 +18,11 @@ import com.learntodroid.mvvmrestapi.util.Util;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BookSearchResultsAdapter extends RecyclerView.Adapter<BookSearchResultsAdapter.BookSearchResultHolder> {
-    private List<Volume> results = new ArrayList<>();
+public class BookSearchResultsAdapter extends ListAdapter<Volume, BookSearchResultsAdapter.BookSearchResultHolder> {
+
+    protected BookSearchResultsAdapter() {
+        super(Volume.DIFF_UTIL);
+    }
 
     @NonNull
     @Override
@@ -31,7 +35,7 @@ public class BookSearchResultsAdapter extends RecyclerView.Adapter<BookSearchRes
 
     @Override
     public void onBindViewHolder(@NonNull BookSearchResultHolder holder, int position) {
-        Volume volume = results.get(position);
+        Volume volume = getItem(position);
 
         holder.titleTextView.setText(volume.getVolumeInfo().getTitle());
         holder.publishedDateTextView.setText(volume.getVolumeInfo().getPublishedDate());
@@ -50,16 +54,6 @@ public class BookSearchResultsAdapter extends RecyclerView.Adapter<BookSearchRes
             String authors = u.StringJoin(volume.getVolumeInfo().getAuthors(), ", ");
             holder.authorsTextView.setText(authors);
         }
-    }
-
-    @Override
-    public int getItemCount() {
-        return results.size();
-    }
-
-    public void setResults(List<Volume> results) {
-        this.results = results;
-        notifyDataSetChanged();
     }
 
     class BookSearchResultHolder extends RecyclerView.ViewHolder {
